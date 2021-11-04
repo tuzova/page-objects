@@ -38,7 +38,7 @@ public class DataHelper {
     }
 
     public static TransferData getTransferData(AuthInfo authInfo) {
-        return new TransferData("500", "10500", "100","5559000000000001", "5559000000000002");
+        return new TransferData("500", "10500", "100", "5559000000000001", "5559000000000002");
     }
 
 }
