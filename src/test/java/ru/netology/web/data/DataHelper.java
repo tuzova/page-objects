@@ -3,7 +3,8 @@ package ru.netology.web.data;
 import lombok.Value;
 
 public class DataHelper {
-    private DataHelper() {}
+    private DataHelper() {
+    }
 
     @Value
     public static class AuthInfo {
@@ -29,16 +30,12 @@ public class DataHelper {
     }
 
     @Value
-    public static class TransferData {
-        private String amount1;
-        private String amount2;
-        private String amount3;
+    public static class Cards {
         private String cardFirst;
         private String cardSecond;
     }
 
-    public static TransferData getTransferData(AuthInfo authInfo) {
-        return new TransferData("500", "10500", "100", "5559000000000001", "5559000000000002");
+    public static Cards getCardsData(AuthInfo authInfo) {
+        return new Cards("5559000000000001", "5559000000000002");
     }
-
 }
