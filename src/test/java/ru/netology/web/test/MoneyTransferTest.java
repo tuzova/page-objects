@@ -28,15 +28,15 @@ class MoneyTransferTest {
         var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
         var firstCardBalanceFinalExpected = firstCardBalanceInitial + Integer.parseInt(transferAmount);
         var secondCardBalanceFinalExpected = secondCardBalanceInitial - Integer.parseInt(transferAmount);
-        assertEquals(firstCardBalanceFinal, firstCardBalanceFinalExpected); // 10500
-        assertEquals(secondCardBalanceFinal, secondCardBalanceFinalExpected); // 9500
+        assertEquals(firstCardBalanceFinal, firstCardBalanceFinalExpected);
+        assertEquals(secondCardBalanceFinal, secondCardBalanceFinalExpected);
     }
 
     @Test
     void shouldTransferMoneyToSecondCard() {
 
         open("http://localhost:7777");
-        String transferAmount = "10500";
+        String transferAmount = "500";
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -51,16 +51,15 @@ class MoneyTransferTest {
         var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
         var firstCardBalanceFinalExpected = firstCardBalanceInitial - Integer.parseInt(transferAmount);
         var secondCardBalanceFinalExpected = secondCardBalanceInitial + Integer.parseInt(transferAmount);
-        assertEquals(firstCardBalanceFinal, firstCardBalanceFinalExpected); // 0
-        assertEquals(secondCardBalanceFinal, secondCardBalanceFinalExpected); // 20000
-
+        assertEquals(firstCardBalanceFinal, firstCardBalanceFinalExpected);
+        assertEquals(secondCardBalanceFinal, secondCardBalanceFinalExpected);
     }
 
     @Test
-    void shouldNotTransferMoneyIfZeroBalance() {
+    void shouldNotTransferMoneyIfNegativeBalance() {
 
         open("http://localhost:7777");
-        String transferAmount = "100";
+        String transferAmount = "30000";
         var loginPage = new LoginPage();
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
@@ -71,12 +70,7 @@ class MoneyTransferTest {
         var transferPage = dashboardPage.transferToSecondCard();
         var firstCardData = DataHelper.getCardsData(authInfo);
         var transferAction = transferPage.transferToSecondCard(firstCardData, transferAmount);
-        var firstCardBalanceFinal = dashboardPage.getFirstCardBalance();
-        var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
-        var firstCardBalanceFinalExpected = firstCardBalanceInitial - Integer.parseInt(transferAmount);
-        var secondCardBalanceFinalExpected = secondCardBalanceInitial + Integer.parseInt(transferAmount);
-        assertEquals(firstCardBalanceFinal, firstCardBalanceFinalExpected); // -100
-        assertEquals(secondCardBalanceFinal, secondCardBalanceFinalExpected); // 20100
+        transferPage.warningMessage();
     }
 }
 
