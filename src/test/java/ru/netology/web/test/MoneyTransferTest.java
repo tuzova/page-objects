@@ -15,16 +15,16 @@ class MoneyTransferTest {
         open("http://localhost:7777");
         String transferAmount = "500";
         var loginPage = new LoginPage();
-        var authInfo = DataHelper.getAuthInfo(); // берем данные авторизации
-        var verificationPage = loginPage.validLogin(authInfo); // переход на verificationPage с loginPage
-        var verificationCode = DataHelper.getVerificationCodeFor(authInfo); // берем данные кода верификации
-        var dashboardPage = verificationPage.validVerify(verificationCode); // переход на dashboardPage с verificationPage
-        var firstCardBalanceInitial = dashboardPage.getFirstCardBalance(); // получение начального баланса карт
+        var authInfo = DataHelper.getAuthInfo();
+        var verificationPage = loginPage.validLogin(authInfo);
+        var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
+        var dashboardPage = verificationPage.validVerify(verificationCode);
+        var firstCardBalanceInitial = dashboardPage.getFirstCardBalance();
         var secondCardBalanceInitial = dashboardPage.getSecondCardBalance();
-        var transferPage = dashboardPage.transferToFirstCard(); // переход на transferPage с dashboardPage
-        var secondCardData = DataHelper.getCardsData(authInfo); // берем данные второй карты
-        var transferAction = transferPage.transferToFirstCard(secondCardData, transferAmount);
-        var firstCardBalanceFinal = dashboardPage.getFirstCardBalance(); // получение конечного баланса карт
+        var transferPage = dashboardPage.transferToFirstCard();
+        var cardsData = DataHelper.getCardsData(authInfo);
+        var transferAction = transferPage.transfer(cardsData.getCardSecond(), transferAmount);
+        var firstCardBalanceFinal = dashboardPage.getFirstCardBalance();
         var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
         var firstCardBalanceFinalExpected = firstCardBalanceInitial + Integer.parseInt(transferAmount);
         var secondCardBalanceFinalExpected = secondCardBalanceInitial - Integer.parseInt(transferAmount);
@@ -45,8 +45,8 @@ class MoneyTransferTest {
         var firstCardBalanceInitial = dashboardPage.getFirstCardBalance();
         var secondCardBalanceInitial = dashboardPage.getSecondCardBalance();
         var transferPage = dashboardPage.transferToSecondCard();
-        var firstCardData = DataHelper.getCardsData(authInfo);
-        var transferAction = transferPage.transferToSecondCard(firstCardData, transferAmount);
+        var cardsData = DataHelper.getCardsData(authInfo);
+        var transferAction = transferPage.transfer(cardsData.getCardFirst(), transferAmount);
         var firstCardBalanceFinal = dashboardPage.getFirstCardBalance();
         var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
         var firstCardBalanceFinalExpected = firstCardBalanceInitial - Integer.parseInt(transferAmount);
@@ -68,9 +68,13 @@ class MoneyTransferTest {
         var firstCardBalanceInitial = dashboardPage.getFirstCardBalance();
         var secondCardBalanceInitial = dashboardPage.getSecondCardBalance();
         var transferPage = dashboardPage.transferToSecondCard();
-        var firstCardData = DataHelper.getCardsData(authInfo);
-        var transferAction = transferPage.transferToSecondCard(firstCardData, transferAmount);
+        var cardsData = DataHelper.getCardsData(authInfo);
+        var transferAction = transferPage.transfer(cardsData.getCardFirst(), transferAmount);
         transferPage.warningMessage();
+        var firstCardBalanceFinal = dashboardPage.getFirstCardBalance();
+        var secondCardBalanceFinal = dashboardPage.getSecondCardBalance();
+        assertEquals(firstCardBalanceFinal, firstCardBalanceInitial);
+        assertEquals(secondCardBalanceFinal, secondCardBalanceInitial);
     }
 }
 

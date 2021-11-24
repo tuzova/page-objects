@@ -14,26 +14,17 @@ public class TransferPage {
     private SelenideElement transferCardField = $("[data-test-id='from'] input");
     private SelenideElement actionTransferButton = $("[data-test-id=action-transfer]");
 
-
-    // метод перевода со второй карты на первую
-    public DashboardPage transferToFirstCard(DataHelper.Cards cardData, String transferAmount) {
+    public DashboardPage transfer(String cardNumber, String transferAmount) {
         amountField.setValue(transferAmount);
-        transferCardField.setValue(cardData.getCardSecond());
+        transferCardField.setValue(cardNumber);
         actionTransferButton.click();
         return new DashboardPage();
     }
 
-    // метод перевода с первой карты на вторую
-    public DashboardPage transferToSecondCard(DataHelper.Cards cardData, String transferAmount) {
-        amountField.setValue(transferAmount);
-        transferCardField.setValue(cardData.getCardFirst());
-        actionTransferButton.click();
-        return new DashboardPage();
-    }
-
-    public void warningMessage() {
+    public DashboardPage warningMessage() {
         $(withText("Ошибка")).shouldBe(visible, Duration.ofSeconds(15));
         $("[data-test-id='error-notification'] div.notification__content").shouldBe(visible);
         $(withText("Неверно указана сумма перевода")).shouldBe(visible);
+        return new DashboardPage();
     }
 }
